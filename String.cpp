@@ -17,7 +17,7 @@ string_t::~string_t( void )
     string::clear( *this );
 }
 
-void string_t::operator=( const char *cstr )
+string_t & string_t::operator=( const char *cstr )
 {
     int len = strlen( cstr );
     if ( !this->data ) {
@@ -29,5 +29,6 @@ void string_t::operator=( const char *cstr )
     }
     this->length = len;
     memcpy( this->data, cstr, len );
+    return *this;
 }
 

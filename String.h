@@ -1,5 +1,7 @@
 #include <cstdlib>
 #include <cstring>
+#include <cstdio>
+#include <cstdint>
 
 struct string_t {
     size_t          length = 0;
@@ -9,19 +11,40 @@ struct string_t {
                     string_t( void );
                     string_t( const char *cstr );
 
-    virtual          ~string_t( void );
+                    ~string_t( void );
 
     
     string_t &      operator=( const string_t &str ) = default;
-    void            operator=( const char *cstr );
+    string_t &      operator=( const char *cstr );
 
 
-    inline unsigned char operator[]( size_t index )
+    inline unsigned char & operator[]( uint32_t index )
     {
-        if ( index < this->length ) {
-            return this->data[ index ];
+        if ( this->data ) {
+            if ( index < this->length ) {
+                return this->data[ index ];
+            } else {
+                printf( "error: trying to access string character [%d] (boundary limit check)\n", index );
+                exit( 1 );
+            }
         } else {
-            return this->data[ 0 ];
+            printf( "error: string not initialized (null pointer)" );
+            exit( 1 );
+        }
+    }
+    
+    inline const unsigned char & operator[]( uint32_t index ) const
+    {
+        if ( this->data ) {
+            if ( index < this->length ) {
+                return this->data[ index ];
+            } else {
+                printf( "error: trying to access string character [%d] (boundary limit check)\n", index );
+                exit( 1 );
+            }
+        } else {
+            printf( "error: string not initialized (null pointer)" );
+            exit( 1 );
         }
     }
 };
@@ -41,6 +64,7 @@ namespace string {
     {
         if ( str.data ) {
             free( str.data );
+            str.data = nullptr;
         }
         str.length = 0;
     }
@@ -48,10 +72,14 @@ namespace string {
 
     inline char * to_cstr( const string_t &str )
     {
-        char *cstr = ( char * ) allocate( str.length );
-        memcpy( cstr, str.data, str.length );
-        cstr[ str.length ] = 0;
-        return cstr;
+        if ( str.data ) {
+            char *cstr = ( char * ) allocate( str.length );
+            memcpy( cstr, str.data, str.length );
+            cstr[ str.length ] = 0;
+            return cstr;
+        } else {
+            return nullptr;
+        }
     }
 
 
