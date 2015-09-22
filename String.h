@@ -1,3 +1,6 @@
+#ifndef STRING_H
+#define STRING_H
+
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
@@ -124,3 +127,4 @@ namespace string {
     }
 }
 
+#endif
