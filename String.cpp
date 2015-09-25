@@ -3,6 +3,22 @@
 #include <cstdio>
 #include <cstdlib>
 
+static inline string_t & CopyDataToString( string_t &str, const uint8_t *data,
+                                           size_t length )
+{
+    if ( str.data ) {
+        if ( str.length < length ) {
+            str.data = ( unsigned char * ) string::resize( str, length );
+        }
+    } else {
+        str.data = ( unsigned char * ) string::allocate( length );
+    }
+    str.length = length;
+    memcpy( str.data, data, length );
+    return str;
+}
+
+
 string_t::string_t( void )
 {
 }
@@ -17,18 +33,13 @@ string_t::~string_t( void )
     string::clear( *this );
 }
 
+string_t & string_t::operator=( const string_t &str )
+{
+    return CopyDataToString( *this, str.data, str.length );
+}
+
 string_t & string_t::operator=( const char *cstr )
 {
-    int len = strlen( cstr );
-    if ( !this->data ) {
-        this->data = ( unsigned char * ) string::allocate( len );
-    } else {
-        if ( this->length < len ) {
-            this->data = ( unsigned char * ) string::resize( *this, len );
-        }
-    }
-    this->length = len;
-    memcpy( this->data, cstr, len );
-    return *this;
+    return CopyDataToString( *this, ( const uint8_t * ) cstr, strlen( cstr ) );
 }
 

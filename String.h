@@ -7,18 +7,18 @@
 #include <cstdint>
 
 struct string_t {
-    size_t          length = 0;
-    unsigned char   *data = nullptr;
+    size_t      length = 0;
+    uint8_t     *data = nullptr;
 
 
-                    string_t( void );
-                    string_t( const char *cstr );
+                string_t( void );
+                string_t( const char *cstr );
 
-                    ~string_t( void );
+                ~string_t( void );
 
     
-    string_t &      operator=( const string_t &str ) = default;
-    string_t &      operator=( const char *cstr );
+    string_t &  operator=( const string_t &str );
+    string_t &  operator=( const char *cstr );
 
 
     inline unsigned char & operator[]( uint32_t index )
@@ -27,7 +27,8 @@ struct string_t {
             if ( index < this->length ) {
                 return this->data[ index ];
             } else {
-                printf( "error: trying to access string character [%d] (boundary limit check)\n", index );
+                printf( "error: trying to access string character [%d]"
+                        " (boundary limit check)\n", index );
                 exit( 1 );
             }
         } else {
@@ -42,7 +43,8 @@ struct string_t {
             if ( index < this->length ) {
                 return this->data[ index ];
             } else {
-                printf( "error: trying to access string character [%d] (boundary limit check)\n", index );
+                printf( "error: trying to access string character [%d]"
+                        " (boundary limit check)\n", index );
                 exit( 1 );
             }
         } else {
